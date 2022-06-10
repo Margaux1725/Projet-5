@@ -213,36 +213,36 @@ if (page.match("cart")) {
     valeur = e.target.value;
     let regMatch = valeur.match(regMatchEmail);
     let regValide = valeur.search(regValideEmail);
+    if (valeur === "" && regMatch === null) {
+      contactClient.regexEmail = 0;
+      regexEmail.style.backgroundColor = "rgb(220, 50, 50)";
+      document.querySelector("#emailErrorMsg").textContent = "Veuillez renseigner votre email.";
+      document.querySelector("#emailErrorMsg").style.color = "white";
+    } else if ( regValide !== 0) {
+      contactClient.regexEmail = 0;
+      regexEmail.style.backgroundColor = "rgb(220, 50, 50)";
+      document.querySelector("#emailErrorMsg").innerHTML = "Caractère non valide";
+      document.querySelector("#emailErrorMsg").style.color = "white";
+    } else if (valeur != "" && regMatch == null) {
+      contactClient.regexEmail = 0;
+      regexEmail.style.backgroundColor = "rgb(220, 50, 50)";
+      document.querySelector("#emailErrorMsg").innerHTML = "Caratères acceptés pour ce champ. Forme email pas encore conforme";
+      document.querySelector("#emailErrorMsg").style.color = "white";
+    } else {
+      contactClient.email = email.value;
+      contactClient.regexEmail = 1;
+      regexEmail.style.backgroundColor = "rgb(0, 138, 0)"
+      regexEmail.style.color = "white";
+      document.querySelector("#emailErrorMsg").innerHTML = "Forme email conforme.";
+      document.querySelector("#emailErrorMsg").style.color = "white";
+    }
     if (regValide === 0 && regMatch !== null) {
       contactClient.email = email.value;
       contactClient.regexEmail = 1;
     } else {
       contactClient.regexEmail = 0;
     }
-    Client = contactClient;
-    couleurRegex(regValide, valeur, regexEmail);
     valideClic();
-  });
-}
-// texte sous champ email
-if (page.match("cart")) {
-  email.addEventListener("input", (e) => {
-    valeur = e.target.value;
-    let regMatch = valeur.match(regMatchEmail);
-    let regValide = valeur.search(regValideEmail);
-    if (valeur === "" && regMatch === null) {
-      document.querySelector("#emailErrorMsg").textContent = "Veuillez renseigner votre email.";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    } else if ( regValide !== 0) {
-      document.querySelector("#emailErrorMsg").innerHTML = "Caractère non valide";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    } else if (valeur != "" && regMatch == null) {
-      document.querySelector("#emailErrorMsg").innerHTML = "Caratères acceptés pour ce champ. Forme email pas encore conforme";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    } else {
-      document.querySelector("#emailErrorMsg").innerHTML = "Forme email conforme.";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    }
   });
 }
 // fonction couleurRegex qui modifira la couleur de l'input par remplissage tapé, aide visuelle et accessibilité
@@ -251,10 +251,11 @@ function couleurRegex(regSearch, valeurEcoute, inputAction) {
   if (valeurEcoute === "" && regSearch != 0) {
     inputAction.style.backgroundColor = "white";
     inputAction.style.color = "black";
-  } else if (valeurEcoute !== "" && regSearch != 0 || Client.regexEmail === 0) {
+  //} else if (valeurEcoute !== "" && regSearch != 0 || Client.regexEmail === 0 && regSearch != 0) {
+  } else if (regSearch != 0) {
     inputAction.style.backgroundColor = "rgb(220, 50, 50)";
     inputAction.style.color = "white";
-  } else {
+  } else if (regSearch === 0){
     inputAction.style.backgroundColor = "rgb(0, 138, 0)";
     inputAction.style.color = "white";
   }
@@ -271,7 +272,7 @@ function texteInfo(regex, pointage, zoneEcoute) {
       } else if (valeur !== "" && index != 0) {
         document.querySelector(pointage).innerHTML = "Reformulez cette donnée";
         document.querySelector(pointage).style.color = "white";
-      } else {
+      } else if (index === 0){
       document.querySelector(pointage).innerHTML = "Caratères acceptés pour ce champ.";
       document.querySelector(pointage).style.color = "white";
       }
@@ -296,7 +297,6 @@ function valideClic() {
 if (page.match("cart")) {
   commande.addEventListener("click", (e) => {
     e.preventDefault();
-    //valideClic();
     envoiPaquet();
   });
 }
